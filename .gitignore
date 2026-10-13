@@ -1,0 +1,21 @@
+# External inputs and generated artifacts are intentionally not part of QIVER.
+/data/
+/knowledge/
+/outputs/
+/results/
+/artifacts/
+/checkpoints/
+/models/
+
+*.csv
+*.parquet
+*.jsonl
+*.sqlite
+*.db
+*.pdf
+*.png
+*.jpg
+*.jpeg
+__pycache__/
+*.py[cod]
+.pytest_cache/

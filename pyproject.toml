@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qiver"
+version = "1.0.0"
+description = "Question-conditioned Identity--Value Evidence Retrieval"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "PyYAML>=6.0",
+  "scipy>=1.10",
+  "tqdm>=4.65",
+  "openai>=1.0",
+  "transformers>=4.40",
+  "torch>=2.1",
+]
+
+[project.optional-dependencies]
+local = ["vllm>=0.6"]
+
+[project.scripts]
+qiver = "qiver.cli:main"
+
+[tool.setuptools]
+packages = ["qiver", "qiver.core"]

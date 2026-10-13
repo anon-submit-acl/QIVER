@@ -1,0 +1,61 @@
+name: qiver_evidence_grounded_reasoning
+
+# Retrieval defaults: two source questions, similarity >= 0.90, correlated
+# identity-family deduplication, and no cap on matching combination or single
+# identity evidence statements. Caps are exposed only for ablations.
+
+system_prompt: |
+  Follow the requested output format exactly. Do not add text outside the specified tags.
+  Inside <answer>, copy exactly one complete option string from the Options list. Never output only a paraphrase or a shortened part of an option.
+
+identity_template: |
+  ### [Identity Profile]
+  The profile is defined by the selected WVS identity fields:
+  $identity_items
+
+user_prompt: |
+  You are answering a World Values Survey (WVS) question as the person described by the identity profile.
+  Reason entirely from that person's first-person perspective. Begin your reasoning naturally with wording such as
+  “As a person who is ...” or “As someone who ...”, and use “I”, “my”, and “me” when describing the person's perspective.
+
+  $identity_profile
+
+  $identity_knowledge
+
+  ### [Task]
+  Infer the most likely answer by combining the identity profile with the provided group-level tendencies.
+  Use the tendencies internally as background guidance. Do not mention the knowledge base, training data,
+  retrieved evidence, probabilities, distributions, or statistical group comparisons in your reasoning.
+
+  The evidence describes a tendency among people with similar identities, not a certain answer for every individual.
+  Do not automatically choose the leading response as if it were deterministic. Preserve uncertainty when the
+  evidence is weak or mixed, and do not invent specific life events, experiences, or beliefs that are not supported
+  by the identity profile.
+
+  Apply these rules:
+  1. Use the most relevant identity or identity combination as a directional clue, not as a certainty.
+  2. Give more specific identity combinations priority over isolated, weaker clues when they are compatible.
+  3. Treat overlapping demographic fields as descriptions of one person, not as independent repeated votes.
+  4. Related-question evidence is indirect. Use it only when it expresses the same underlying value or behavior.
+
+  Write first-person reasoning and choose exactly one option.
+
+  ### [Output Format]
+  <reasoning>
+  Your first-person reasoning as the represented person. Do not mention statistical evidence or the knowledge base.
+  </reasoning>
+  <answer>
+  The exact text of the chosen option.
+  </answer>
+
+  ### [Survey Question]
+  Question: $question
+  Options:
+  $options
+
+  ### [Answer Constraint]
+  Inside <answer>, copy the exact option string, not an explanatory meaning. Do not shorten an option containing punctuation or commas.
+
+output:
+  answer_start: "<answer>"
+  answer_end: "</answer>"
